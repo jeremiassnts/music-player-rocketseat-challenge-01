@@ -17,3 +17,21 @@
     align-items: center;
     padding-top: 15px;
 }
+
+.coverinfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+@media(min-height: 580px) {
+    .coverinfo {
+        flex-direction: column;
+    }
+}
+@media(max-height: 580px) {
+    .coverinfo {
+        flex-direction: row;
+    }
+}
