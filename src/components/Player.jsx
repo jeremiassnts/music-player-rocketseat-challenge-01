@@ -9,19 +9,20 @@ import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
 export function Player() {
-    var duration = "00:10"
-    var durationInSeconds = 10
+    var DURATION = "00:10"
+    var DURATION_IN_SECONDS = 10
 
     const [now, setNow] = useState("00:00")
     const [nowInSeconds, setNowInSeconds] = useState(0)
-    const [left, setLeft] = useState(duration)
-    const [total] = useState(duration)
-    const [totalInSeconds] = useState(durationInSeconds)
+    const [left, setLeft] = useState(DURATION)
+    const [total] = useState(DURATION)
+    const [totalInSeconds] = useState(DURATION_IN_SECONDS)
     const [percentage, setPercentage] = useState(0)
+    const [playing, setPlaying] = useState(false)
 
     function musicTimeout() {
         setNowInSeconds(prev => {
-            if (prev >= totalInSeconds) {
+            if (prev >= totalInSeconds || !playing) {
                 return prev
             }
             else {
@@ -32,9 +33,24 @@ export function Player() {
                 setNow(timeNow.format('mm:ss'))
                 setLeft(timeLeft.format('mm:ss'))
                 setPercentage(Math.ceil((prev + 1) / totalInSeconds * 100))
+
+                if (prev + 1 >= totalInSeconds) {
+                    setPlaying(false)
+                }
+
                 return prev + 1
             }
         })
+    }
+
+    function handlePlay() {
+        if (nowInSeconds >= totalInSeconds && !playing) {
+            setNow("00:00")
+            setNowInSeconds(0)
+            setLeft(DURATION)
+            setPercentage(0)
+        }
+        setPlaying(!playing)
     }
 
     useEffect(() => {
@@ -42,7 +58,7 @@ export function Player() {
         return () => {
             clearInterval(timeout)
         }
-    }, []);
+    }, [playing]);
 
     return (
         <div className={style.container}>
@@ -52,7 +68,7 @@ export function Player() {
             </div>
             <div className={style.buttons}>
                 <Button Icon={FaBackward} color="#E1E1E6" size="1.2em" />
-                <Button Icon={FaPlay} color="#E1E1E6" size="1.2em" />
+                <Button Icon={playing ? FaPause : FaPlay} color="#E1E1E6" size="1.2em" action={handlePlay} />
                 <Button Icon={FaForward} color="#E1E1E6" size="1.2em" />
             </div>
             <Timeline className={style.timeline} now={now} left={left} percentage={percentage} />
