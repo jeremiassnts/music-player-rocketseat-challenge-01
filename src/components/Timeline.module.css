@@ -1,6 +1,6 @@
 .container {
     width: 100%;
-    padding-top: 40px;
+    padding-top: 30px;
 }
 .line{
     background-color: #838383;
@@ -10,7 +10,6 @@
 }
 .line div {
     background-color: #D9D9D9;
-    width: 90%;
     border-radius: 5px;
     height: 100%;
 }
